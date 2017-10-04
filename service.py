@@ -20,7 +20,7 @@ RETRY_ATTEMPTS = 3
 
 
 @app.route('/geocode/')
-def hello():
+def geocode():
     address = request.args.get('address', None)
     if not address:
         return jsonify(error='Missing address in query params'), 400
@@ -36,4 +36,4 @@ def hello():
         else:
             return jsonify(**response.json())
 
-    return jsonify(error='Something goes wrong. Please try again'), 500
+    return jsonify(error='Something went wrong. Please try again later'), 500
