@@ -23,7 +23,7 @@ RETRY_ATTEMPTS = 3
 def geocode():
     address = request.args.get('address', None)
     if not address:
-        return jsonify(error='Missing address in query params'), 400
+        return jsonify(error_message='Missing address in query params'), 400
     url = BACKEND_URL + '?address={}'.format(address)
 
     attempts = RETRY_ATTEMPTS
@@ -36,4 +36,5 @@ def geocode():
         else:
             return jsonify(**response.json())
 
-    return jsonify(error='Something went wrong. Please try again later'), 500
+    return jsonify(
+        error_message='Something went wrong. Please try again later'), 500

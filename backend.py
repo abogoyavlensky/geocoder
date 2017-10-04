@@ -28,7 +28,7 @@ OCCASIONS = [
     {'name': TIMEOUT, 'values': [0.5, 1, 2, 3, 5]},
     {'name': OK, 'values': []}
 ]
-WEIGHTS = [0.2, 0.2, 0.6]
+WEIGHTS = [0.25, 0.25, 0.5]
 
 
 async def get_occasion():
