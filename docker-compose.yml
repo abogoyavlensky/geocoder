@@ -7,7 +7,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: ./compose/django/Dockerfile
+      dockerfile: ./compose/backend/Dockerfile
     command: python backend.py
     links:
       - redis
