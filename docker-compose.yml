@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   redis:
@@ -11,8 +11,6 @@ services:
     command: python backend.py
     links:
       - redis
-    env_file:
-      - .env
     volumes:
       - .:/app
     ports:

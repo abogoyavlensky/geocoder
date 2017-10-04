@@ -21,7 +21,7 @@ You should probably pay attention to:
 
 ## Setup
 Please setup docker-engine and docker-compose before trying to start service.
-You should create `.env` file in dir root of the project. That file must 
+You should create `.env` file in dir root of the project. Env file must 
 contain at least one environment variable:
 ```bash
 GOOGLE_MAPS_API_KEY=[secret]

@@ -48,6 +48,8 @@ async def fetch(session, url):
 async def geocode(request):
     """Returns geocode resulting respons from API."""
     address = request.args.get('address', '')
+    if not address:
+        return HTTPResponse('Missing address in query params', status=400)
     url = BASE_URL.format(address, API_KEY)
 
     occasion = await get_occasion()
