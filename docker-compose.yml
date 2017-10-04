@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  redis:
+    image: redis:4-alpine
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./compose/django/Dockerfile
+    command: python backend.py
+    links:
+      - redis
+      # TODO: update env
+#    environment:
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
