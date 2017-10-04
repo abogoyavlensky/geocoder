@@ -4,14 +4,37 @@ services:
   redis:
     image: redis:4-alpine
 
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/nginx/Dockerfile
+    ports:
+     - 8000:80
+    links:
+     - backend
+#     - service
+
   backend:
     build:
       context: .
       dockerfile: ./compose/backend/Dockerfile
     command: python backend.py
-    links:
-      - redis
     volumes:
       - .:/app
     ports:
-      - "8000:80"
+      - 9000
+
+#  service:
+#    build:
+#      context: .
+#      dockerfile: ./compose/backend/Dockerfile
+#    command: flask run
+#    environment:
+#      - FLASK_APP=service.py
+#    links:
+#      - redis
+#      - backend
+#    volumes:
+#      - .:/app
+#    ports:
+#      - 5000
