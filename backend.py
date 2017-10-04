@@ -25,7 +25,7 @@ TIMEOUT = 'timeout'
 OK = 'OK'
 OCCASIONS = [
     {'name': ERROR, 'values': [500, 502, 503]},
-    {'name': TIMEOUT, 'values': [0.2, 0.5, 1, 2, 3, 5]},
+    {'name': TIMEOUT, 'values': [0.5, 1, 2, 3, 5]},
     {'name': OK, 'values': []}
 ]
 WEIGHTS = [0.2, 0.2, 0.6]
@@ -64,4 +64,4 @@ async def geocode(request):
         return json(results)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9000, workers=2)
+    app.run(host='0.0.0.0', port=80, workers=2)

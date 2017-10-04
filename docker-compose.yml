@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
   redis:
@@ -31,6 +31,7 @@ services:
     command: flask run --host=0.0.0.0 --port=5001
     environment:
       - FLASK_APP=service.py
+      - BACKEND_URL=http://backend/
     links:
       - redis
       - backend
