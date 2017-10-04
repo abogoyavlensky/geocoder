@@ -12,7 +12,7 @@ services:
      - 8000:80
     links:
      - backend
-#     - service
+     - service
 
   backend:
     build:
@@ -21,20 +21,20 @@ services:
     command: python backend.py
     volumes:
       - .:/app
-    ports:
-      - 9000
+#    ports:
+#      - 9000
 
-#  service:
-#    build:
-#      context: .
-#      dockerfile: ./compose/backend/Dockerfile
-#    command: flask run
-#    environment:
-#      - FLASK_APP=service.py
-#    links:
-#      - redis
-#      - backend
-#    volumes:
-#      - .:/app
+  service:
+    build:
+      context: .
+      dockerfile: ./compose/backend/Dockerfile
+    command: flask run --host=0.0.0.0 --port=5000
+    environment:
+      - FLASK_APP=service.py
+    links:
+      - redis
+      - backend
+    volumes:
+      - .:/app
 #    ports:
 #      - 5000
