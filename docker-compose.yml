@@ -11,9 +11,9 @@ services:
     command: python backend.py
     links:
       - redis
-      # TODO: update env
-#    environment:
+    env_file:
+      - .env
     volumes:
       - .:/app
     ports:
-      - "8000:8000"
+      - "8000:80"

@@ -4,7 +4,9 @@ Develop in Python a caching service for an "unstable backend" (you could impleme
 for example you could use https://maps.googleapis.com API with random lags).
 Caching service should expose one endpoint:
 
+```bash
 GET /geocode?address="some address"
+```
 
 which returns and caches all successful responses from backend.
 "Unstable backend" might occasionally return 5xx errors or respond slowly.
@@ -19,10 +21,14 @@ You should probably pay attention to:
 
 ## Setup
 Please setup docker-engine and docker-compose before trying to start service.
+You should create `.env` file in dir root of the project. That file must 
+contain at least one environment variable:
+```bash
+GOOGLE_MAPS_API_KEY=[secret]
+```
 
 ## How to start
 ```bash
-$ docker-compose build
 $ docker-compose up
 ```
 
