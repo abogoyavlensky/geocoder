@@ -7,29 +7,33 @@
     :copyright: (c) 2017 by Andrey Bogoyavlensky.
 """
 import os
-import requests
-import time
+from timeit import default_timer
 
-from requests.exceptions import RequestException, Timeout
+import requests
 from flask import Flask, request, jsonify
+from requests.exceptions import RequestException, Timeout
+
 app = Flask(__name__)
 
 BACKEND_URL = os.environ.get('BACKEND_URL', 'http://backend/')
 DEFAULT_TIMEOUT = 0.5
 RETRY_ATTEMPTS = 3
 MAX_TIMEOUT = 2
-ASSUMPTION = 0.25
+ASSUMPTION = 0.05
 MAX_RETRY_TIMEOUT = MAX_TIMEOUT - (DEFAULT_TIMEOUT + ASSUMPTION)
 
 
 class Timer:
+    def __init__(self):
+        self.timer = default_timer
+
     def __enter__(self):
-        self.start = time.clock()
+        self.start = self.timer()
         return self
 
     def __exit__(self, *args):
-        self.end = time.clock()
-        self.interval = (self.end - self.start) * 100
+        self.end = self.timer()
+        self.interval = self.end - self.start
 
 
 @app.route('/geocode/')
