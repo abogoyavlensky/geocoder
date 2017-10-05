@@ -15,6 +15,7 @@ from flask_redis import FlaskRedis
 from requests.exceptions import RequestException, Timeout
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 app.config['REDIS_URL'] = os.environ.get('REDIS_URL', 'redis://redis:6379')
 redis_store = FlaskRedis(app)
 
