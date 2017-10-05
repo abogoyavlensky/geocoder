@@ -16,6 +16,7 @@ from sanic import Sanic
 from sanic.response import json, HTTPResponse
 
 app = Sanic()
+app.config.LOGO = None
 
 API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', '')
 BASE_URL = ('https://maps.googleapis.com/maps/api/geocode/json'
