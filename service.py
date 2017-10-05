@@ -10,10 +10,13 @@ import os
 from timeit import default_timer
 
 import requests
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, json
+from flask_redis import FlaskRedis
 from requests.exceptions import RequestException, Timeout
 
 app = Flask(__name__)
+app.config['REDIS_URL'] = os.environ.get('REDIS_URL', 'redis://redis:6379')
+redis_store = FlaskRedis(app)
 
 BACKEND_URL = os.environ.get('BACKEND_URL', 'http://backend/')
 DEFAULT_TIMEOUT = 0.5
@@ -21,6 +24,7 @@ RETRY_ATTEMPTS = 3
 MAX_TIMEOUT = 2
 ASSUMPTION = 0.05
 MAX_RETRY_TIMEOUT = MAX_TIMEOUT - (DEFAULT_TIMEOUT + ASSUMPTION)
+CACHE_EXPIRATION = os.environ.get('CACHE_EXPIRATION', 10)
 
 
 class Timer:
@@ -41,8 +45,12 @@ def geocode():
     address = request.args.get('address', None)
     if not address:
         return jsonify(error_message='Missing address in query params'), 400
-    url = BACKEND_URL + '?address={}'.format(address)
 
+    results = redis_store.get(address)
+    if results:
+        return jsonify(**json.loads(results))
+
+    url = BACKEND_URL + '?address={}'.format(address)
     retry_timeout = MAX_RETRY_TIMEOUT
     while retry_timeout > 0:
         try:
@@ -52,7 +60,9 @@ def geocode():
         except (RequestException, Timeout):
             pass
         else:
-            return jsonify(**response.json())
+            results = response.json()
+            redis_store.set(address, json.dumps(results), CACHE_EXPIRATION)
+            return jsonify(**results)
         finally:
             retry_timeout -= t.interval
 

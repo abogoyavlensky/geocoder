@@ -32,6 +32,7 @@ services:
     environment:
       - FLASK_APP=service.py
       - BACKEND_URL=http://backend/
+      - REDIS_URL=redis://redis:6379
     links:
       - redis
       - backend
