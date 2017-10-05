@@ -21,10 +21,11 @@ You should probably pay attention to:
 
 ## Setup
 Please setup `docker-engine` and `docker-compose` before trying to run service.
-You should create `.env` file in dir root of the project. Env file must 
-contain at least one environment variable:
+If you want to add some configuration you could create `.env` file in root dir
+of the project. Env file could contain several environment variables:
 ```bash
 GOOGLE_MAPS_API_KEY=[secret]
+IS_CACHE_ENABLED=True | False  # `True` by default 
 ```
 
 ## How to run
@@ -38,13 +39,10 @@ $ docker-compose up
 Now you could request geocoding for any address. For example, please try 
 following request in browser:
 ```bash
-$ http://localhost:8000/geocode/?address=Москва,+Ботаничесикй+переулок+5
+$ http://localhost:8000/geocode/?address=Moscow,+Tulskaya+10
 ```
 
 Or the same request in console using `curl` and `time` to check response time:
 ```bash
-$ time curl http://localhost:8000/geocode/?address=
-%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0,+
-%D0%91%D0%BE%D1%82%D0%B0%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9+
-%D0%BF%D0%B5%D1%80%D0%B5%D1%83%D0%BB%D0%BE%D0%BA+5
+$ time curl http://localhost:8000/geocode/?address=Moscow,+Tulskaya+10
 ```

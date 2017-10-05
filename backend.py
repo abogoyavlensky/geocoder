@@ -14,11 +14,15 @@ import aiohttp
 import async_timeout
 from sanic import Sanic
 from sanic.response import json, HTTPResponse
+from envparse import Env
+
+env = Env()
+env.read_envfile()
 
 app = Sanic()
 app.config.LOGO = None
 
-API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', '')
+API_KEY = env('GOOGLE_MAPS_API_KEY', default='')
 BASE_URL = ('https://maps.googleapis.com/maps/api/geocode/json'
             '?address={}&key={}')
 ERROR = 'error'
@@ -29,7 +33,7 @@ LAGS = [
     {'name': TIMEOUT, 'values': [0.5, 1, 2, 3, 5]},
     {'name': OK, 'values': []}
 ]
-WEIGHTS = [0.25, 0.25, 0.5]
+WEIGHTS = [0.2, 0.2, 0.6]
 
 
 async def get_random_lag():

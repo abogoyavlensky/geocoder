@@ -3,3 +3,4 @@ aiohttp==2.2.5
 Flask==0.12.2
 flask-redis==0.3.0
 requests==2.18.4
+envparse==0.2.0
