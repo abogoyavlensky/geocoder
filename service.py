@@ -2,7 +2,7 @@
     service.py
     ~~~~~~~~~~
 
-    Web service to connect with backend via API.
+    Web service to get data from backend.
 
     :copyright: (c) 2017 by Andrey Bogoyavlensky.
 """
@@ -29,6 +29,7 @@ CACHE_EXPIRATION = os.environ.get('CACHE_EXPIRATION', 10)
 
 
 class Timer:
+    """Counts time of execution wrapped code's block."""
     def __init__(self):
         self.timer = default_timer
 
@@ -43,10 +44,12 @@ class Timer:
 
 @app.route('/geocode/')
 def geocode():
+    """Returns geocoding for passed address."""
     address = request.args.get('address', None)
     if not address:
         return jsonify(error_message='Missing address in query params'), 400
 
+    # Try to get results from cache
     results = redis_store.get(address)
     if results:
         return jsonify(**json.loads(results))
