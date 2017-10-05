@@ -17,6 +17,8 @@ from flask import Flask, request, jsonify, json
 from flask_redis import FlaskRedis
 from requests.exceptions import RequestException, Timeout
 
+# Config
+
 env = Env()
 env.read_envfile()
 
@@ -35,6 +37,8 @@ CACHE_EXPIRATION = env('CACHE_EXPIRATION', default=5)
 IS_CACHE_ENABLED = env.bool('IS_CACHE_ENABLED', default=True)
 API_ERRORS = ['OVER_QUERY_LIMIT']
 
+
+# Utils
 
 class Timer:
     """Counts time of execution wrapped code's block."""
@@ -68,6 +72,8 @@ def do_request(url, params):
         redis_store.set(query, json.dumps(results), CACHE_EXPIRATION)
     return results
 
+
+# View
 
 @app.route('/geocode/')
 def geocode():

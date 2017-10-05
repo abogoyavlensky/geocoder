@@ -16,6 +16,8 @@ from sanic import Sanic
 from sanic.response import json, HTTPResponse
 from envparse import Env
 
+# Config
+
 env = Env()
 env.read_envfile()
 
@@ -35,6 +37,8 @@ LAGS = [
 ]
 WEIGHTS = [0.2, 0.2, 0.6]
 
+
+# View
 
 async def get_random_lag():
     """Emulate some lag with request to API."""
