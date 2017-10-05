@@ -24,7 +24,7 @@ BASE_URL = ('https://maps.googleapis.com/maps/api/geocode/json'
 ERROR = 'error'
 TIMEOUT = 'timeout'
 OK = 'OK'
-OCCASIONS = [
+LAGS = [
     {'name': ERROR, 'values': [500, 502, 503]},
     {'name': TIMEOUT, 'values': [0.5, 1, 2, 3, 5]},
     {'name': OK, 'values': []}
@@ -32,9 +32,9 @@ OCCASIONS = [
 WEIGHTS = [0.25, 0.25, 0.5]
 
 
-async def get_occasion():
-    """Emulate some occasion with request to API."""
-    results = random.choices(OCCASIONS, weights=WEIGHTS, k=1)
+async def get_random_lag():
+    """Emulate some lag with request to API."""
+    results = random.choices(LAGS, weights=WEIGHTS, k=1)
     return results[0] if results else {}
 
 
@@ -53,11 +53,11 @@ async def geocode(request):
         return HTTPResponse('Missing address in query params', status=400)
     url = BASE_URL.format(address, API_KEY)
 
-    occasion = await get_occasion()
-    if occasion.get('name') == TIMEOUT:
-        await asyncio.sleep(random.choice(occasion['values']))
-    elif occasion.get('name') == ERROR:
-        status = random.choice(occasion['values'])
+    lag = await get_random_lag()
+    if lag.get('name') == TIMEOUT:
+        await asyncio.sleep(random.choice(lag['values']))
+    elif lag.get('name') == ERROR:
+        status = random.choice(lag['values'])
         return HTTPResponse('', status=status)
 
     async with aiohttp.ClientSession() as session:
@@ -65,4 +65,4 @@ async def geocode(request):
         return json(results)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, workers=2)
+    app.run(host='0.0.0.0', port=80, workers=3)

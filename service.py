@@ -8,6 +8,7 @@
 """
 import os
 from timeit import default_timer
+from urllib.parse import urlencode
 
 import requests
 from flask import Flask, request, jsonify, json
@@ -42,33 +43,45 @@ class Timer:
         self.interval = self.end - self.start
 
 
+def do_request(url, params):
+    """Requests data from api by url and params."""
+    # Try to get results from cache
+    query = urlencode(params)
+    results = redis_store.get(query)
+    if results:
+        return json.loads(results)
+
+    response = requests.get('?'.join([url, query]), timeout=DEFAULT_TIMEOUT)
+    response.raise_for_status()
+    results = response.json()
+    redis_store.set(query, json.dumps(results), CACHE_EXPIRATION)
+    return results
+
+
 @app.route('/geocode/')
 def geocode():
     """Returns geocoding for passed address."""
     address = request.args.get('address', None)
     if not address:
         return jsonify(error_message='Missing address in query params'), 400
+    params = {'address': address}
 
-    # Try to get results from cache
-    results = redis_store.get(address)
-    if results:
-        return jsonify(**json.loads(results))
-
-    url = BACKEND_URL + '?address={}'.format(address)
+    latest_reason = 'Unknown'
     retry_timeout = MAX_RETRY_TIMEOUT
     while retry_timeout > 0:
         try:
             with Timer() as t:
-                response = requests.get(url, timeout=DEFAULT_TIMEOUT)
-            response.raise_for_status()
+                results = do_request(url=BACKEND_URL, params=params)
         except (RequestException, Timeout):
-            pass
+            latest_reason = 'Server error or timeout'
+        except ValueError:
+            latest_reason = 'Response decoded error'
         else:
-            results = response.json()
-            redis_store.set(address, json.dumps(results), CACHE_EXPIRATION)
             return jsonify(**results)
         finally:
             retry_timeout -= t.interval
 
     return jsonify(
-        error_message='Something went wrong. Please try again later'), 500
+        error_message='Something went wrong. Please try again later',
+        latest_reason=latest_reason,
+    ), 500
