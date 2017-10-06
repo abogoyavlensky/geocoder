@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  service:
+    build:
+      context: .
+      dockerfile: ./compose/app/Dockerfile
+    command: py.test
+    image: cacher_service1_1
+    environment:
+      - TESTING=True
+      - FLASK_APP=service.py
+      - BACKEND_URL=http://test/
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - .:/app

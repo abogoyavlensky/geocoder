@@ -46,3 +46,15 @@ Or the same request in console using `curl` and `time` to check response time:
 ```bash
 $ time curl http://localhost:8000/geocode/?address=Moscow,+Tulskaya+10
 ```
+
+
+## Tests
+```bash
+$ docker-compose run -f docker-compose.tests.yml build
+$ docker-compose run -f docker-compose.tests.yml up
+```
+
+To run tests in watching mode for developing:
+```bash
+$ docker-compose -f docker-compose.tests.yml run service ptw
+```

@@ -4,3 +4,9 @@ Flask==0.12.2
 flask-redis==0.3.0
 requests==2.18.4
 envparse==0.2.0
+pytest-flask==0.10.0
+pytest-watch==4.1.0
+pytest-cov==2.4.0
+pytest-mock==1.6.2
+mockredispy==2.9.3
+responses==0.8.1
